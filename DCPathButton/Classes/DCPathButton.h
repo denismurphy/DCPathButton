@@ -198,4 +198,6 @@ typedef NS_ENUM(NSUInteger, kDCPathButtonBloomDirection) {
 
 - (void)centerButtonTapped;
 
+- (void)pathCenterButtonFold;
+
 @end

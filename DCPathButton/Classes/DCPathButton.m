@@ -630,11 +630,8 @@
             AudioServicesPlaySystemSound(self.selectedSound);
         }
         
-        // Excute the explode animation when the item is seleted
-        //
         [UIView animateWithDuration:0.0618f * 5
                          animations:^{
-                             selectedButton.transform = CGAffineTransformMakeScale(3, 3);
                              selectedButton.alpha = 0.0f;
                          }];
         
