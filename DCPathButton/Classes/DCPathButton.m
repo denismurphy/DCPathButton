@@ -27,7 +27,6 @@
 @property (assign, nonatomic) CGPoint pathCenterButtonBloomCenter;
 
 @property (strong, nonatomic) UIView *bottomView;
-@property (strong, nonatomic) UIButton *pathCenterButton;
 @property (strong, nonatomic) NSMutableArray *itemButtons;
 
 @property (assign, nonatomic) SystemSoundID foldSound;
@@ -92,7 +91,7 @@
         
         _allowSubItemRotation = YES;
         
-        _basicDuration = 0.3f;
+        _basicDuration = 0.4f;
         
     }
     return self;
@@ -259,6 +258,7 @@
 #pragma mark - Center Button Delegate
 
 - (void)centerButtonTapped {
+    [self.pathCenterButton setImage:self.buttonOnSelection forState:UIControlStateNormal];
     self.isBloom? [self pathCenterButtonFold] : [self pathCenterButtonBloom];
 }
 
@@ -320,6 +320,10 @@
 
 - (void)pathCenterButtonFold {
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+            [self.pathCenterButton setImage:self.centerImage forState:UIControlStateNormal];
+    });
+    
     // DCPathButton Delegate
     //
     if ([_delegate respondsToSelector:@selector(willDismissDCPathButtonItems:)]) {
@@ -378,15 +382,19 @@
                          completion:nil];
     }
     
-    [UIView animateWithDuration:0.1f
-                          delay:self.basicDuration + 0.05f
+    [UIView animateWithDuration:0.500f
+                          delay:0.0f
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          _bottomView.alpha = 0.0f;
                      }
-                     completion:nil];
+                     completion:^(BOOL finished) {
+                         if(finished){
+                         [_bottomView removeFromSuperview];
+                         }
+                     }];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         // Remove the button items from the superview
         //
@@ -396,8 +404,6 @@
         self.center = _dcButtonCenter;
         
         self.pathCenterButton.center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-        
-        [self.bottomView removeFromSuperview];
     });
     
     _bloom = NO;
@@ -408,7 +414,7 @@
     // 1.Configure rotation animation
     //
     CAKeyframeAnimation *rotationAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.values = @[@(0), @(M_PI), @(M_PI * 2)];
+    rotationAnimation.values = @[@(0), @(M_PI), @(M_PI * 1)];
     rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     rotationAnimation.duration = self.basicDuration + 0.05f;
     
@@ -484,7 +490,7 @@
     
     // 3. Excute the bottom view alpha animation
     //
-    [UIView animateWithDuration:0.0618f * 3
+    [UIView animateWithDuration:0.250f
                           delay:0.0f
                         options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
