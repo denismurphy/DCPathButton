@@ -372,6 +372,8 @@
 
 - (void)resizeToFoldedFrame {
     
+     [self.pathCenterButton setImage:self.centerImage forState:UIControlStateNormal];
+    
     if (self.allowCenterButtonRotation) {
         [UIView animateWithDuration:0.0618f * 3
                               delay:0.0618f * 2
