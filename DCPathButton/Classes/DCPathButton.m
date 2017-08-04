@@ -97,6 +97,12 @@
     return self;
 }
 
+-(void)clearButtons {
+    self.itemButtonImages = [[NSMutableArray alloc]init];
+    self.itemButtonHighlightedImages = [[NSMutableArray alloc]init];
+    self.itemButtons = [[NSMutableArray alloc]init];
+}
+
 - (void)configureViewsLayoutWithButtonSize:(CGSize)centerButtonSize {
     // Init some property only once
     //
